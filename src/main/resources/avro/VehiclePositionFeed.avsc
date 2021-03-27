@@ -1,0 +1,21 @@
+{
+   "namespace": "com.geofence.demo.entity",
+   "type": "record",
+   "name": "VehiclePositionFeed",
+   "fields": [
+     {"name": "id", "type": "string"},
+     {"name": "timestamp", "type": "long", "logicalType": "timestamp-millis"},
+     {
+       "name": "location",
+       "type": {
+         "type": "record",
+         "name": "Location",
+         "fields": [
+           {"name": "lon", "type": "double"},
+           {"name": "lat", "type": "double"}
+         ]
+       }
+     },
+     {"name": "bearing", "type": "double"}
+   ]
+}
