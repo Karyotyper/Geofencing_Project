@@ -20,6 +20,7 @@ import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
 import java.io.*;
+import java.util.Random;
 
 @Component
 @EnableScheduling
@@ -61,7 +62,7 @@ public class FeedPoller {
                 });
     }
 
-    @Scheduled(cron = "*/10 * * * * *")
+    @Scheduled(cron = "*/2 * * * * *")
     private void getBusPositions() {
         try {
 
@@ -143,7 +144,21 @@ public class FeedPoller {
                                             String distance = String.valueOf(distance(baseLat, baseLon, busPosition.getLocation().getLat(),
                                                     busPosition.getLocation().getLon()));
 
-                                            String content = id+location+latitide+bearing+timeStamp+distance;
+                                            //add other sensor data
+//                                            duration,id.orig_p,id.resp_p,orig_pkts,orig_ip_bytes,proto
+                                            Random random = new Random();
+
+                                            float duration = random.nextFloat() * (3 - 1) + 1;
+                                            int orig_p = random.nextInt(60000 - 3 + 1) + 3;
+                                            int resp_p = random.nextInt(60000 - 3 + 1) + 3;
+                                            int origin_pkts = random.nextInt(4 - 1 + 1) + 1;
+                                            int orig_ip_bytes = random.nextInt(660 - 40 + 1) + 40;
+                                            String[] protos = {"tcp","udp","icmp"};
+                                            int rnd = new Random().nextInt(protos.length);
+                                            String proto = protos[rnd];
+
+                                            String content = id+location+latitide+bearing+timeStamp+distance
+                                                    +","+duration+","+orig_p+","+resp_p+","+origin_pkts+","+orig_ip_bytes+","+proto;
 
 
 
@@ -207,5 +222,4 @@ public class FeedPoller {
     }
 
 }
-
 
